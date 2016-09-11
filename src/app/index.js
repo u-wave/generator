@@ -49,10 +49,16 @@ module.exports = Base.extend({
     this.fs.writeJSON(this.destinationPath('package.json'), pkg);
   },
 
-  default() {
-    this.composeWith('uwave:sources', {}, {
-      local: require.resolve('../sources'),
+  _run(name) {
+    this.composeWith(`uwave:${name}`, {}, {
+      local: require.resolve(`../${name}`),
     });
+  },
+
+  default() {
+    this._run('webApiV1');
+    this._run('webClient');
+    this._run('sources');
   },
 
   writing() {
@@ -64,11 +70,6 @@ module.exports = Base.extend({
   },
 
   install() {
-    this.npmInstall([
-      'express',
-      'u-wave-core',
-      'u-wave-api-v1',
-      'u-wave-web',
-    ], { save: true });
+    this.npmInstall([], { save: true });
   },
 });
