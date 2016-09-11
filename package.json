@@ -1,0 +1,30 @@
+{
+  "name": "generator-uwave",
+  "version": "0.0.0",
+  "description": "Yeoman generator for scaffolding üWave servers.",
+  "license": "MIT",
+  "repository": "u-wave/generator",
+  "main": "generators/app/index.js",
+  "engines": {
+    "node": ">= 4.0"
+  },
+  "dependencies": {
+    "yeoman-generator": "^0.24.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015-node4": "^2.1.0",
+    "babel-preset-stage-2": "^6.13.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-if": "^2.0.1",
+    "gulp-newer": "^1.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.9",
+    "through2": "^2.0.1"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "prepublish": "npm run build"
+  }
+}
