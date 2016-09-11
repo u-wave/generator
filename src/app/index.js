@@ -49,6 +49,12 @@ module.exports = Base.extend({
     this.fs.writeJSON(this.destinationPath('package.json'), pkg);
   },
 
+  default() {
+    this.composeWith('uwave:sources', {}, {
+      local: require.resolve('../sources'),
+    });
+  },
+
   writing() {
     this.fs.copyTpl(
       this.templatePath('server.js'),
