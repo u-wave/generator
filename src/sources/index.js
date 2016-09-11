@@ -1,5 +1,7 @@
 import { Base } from 'yeoman-generator';
 import pify from 'pify';
+import { Separator } from 'inquirer';
+import * as messages from '../messages';
 
 /**
  * Recursive generator that keeps asking for media source configuration.
@@ -26,13 +28,20 @@ module.exports = Base.extend({
   async configuringSources() {
     const run = pify(this.env.run.bind(this.env));
 
+    if (this._isFirstRun()) {
+      this.log(messages.sourcesHelp);
+    }
+
     const { sourceType } = await this.prompt([
       {
         type: 'list',
         name: 'sourceType',
-        message: 'Do you want to configure a media source?',
+        message: this._isFirstRun()
+          ? 'Do you want to configure another media source?'
+          : 'Which media source do you want to add?',
         choices: this._availableSources().concat([
-          { value: null, name: 'No' },
+          new Separator(),
+          { value: null, name: 'No, continue with the installation' },
         ]),
       },
     ]);
@@ -61,6 +70,10 @@ module.exports = Base.extend({
       });
     } else {
       this._makePluginFiles = true;
+
+      if (this._isFirstRun()) {
+        this.log(messages.noMediaSourcesConfigured);
+      }
     }
   },
 
@@ -91,5 +104,9 @@ module.exports = Base.extend({
 
   _addUsedSource(sourceType) {
     return this.options.usedSources.concat([sourceType]);
+  },
+
+  _isFirstRun() {
+    return this.options.usedSources.length === 0;
   },
 });

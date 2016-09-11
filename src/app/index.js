@@ -2,46 +2,78 @@ import { Base } from 'yeoman-generator';
 import validateRedis from './validateRedis';
 import validateMongoose from './validateMongoose';
 import jsesc from 'jsesc';
+import * as messages from '../messages';
 
 module.exports = Base.extend({
   initializing() {
+    this.config = {};
   },
 
-  prompting() {
-    return this.prompt([
-      {
-        type: 'input',
-        name: 'redis',
-        message: 'Redis URI, port, or socket',
-        default: 'redis://localhost:6379',
-        filter: jsesc,
-        async validate(url) {
-          try {
-            await validateRedis(url);
-            return true;
-          } catch (e) {
-            return e.message;
-          }
+  prompting: {
+    intro() {
+      this.log(messages.banner);
+
+      return this.prompt([
+        {
+          type: 'confirm',
+          name: 'start',
+          message: 'Begin üWave setup',
+          default: true,
         },
-      },
-      {
-        type: 'input',
-        name: 'mongo',
-        message: 'MongDB URI, port, or socket',
-        default: 'mongodb://localhost:27017/uwave',
-        filter: jsesc,
-        async validate(url) {
-          try {
-            await validateMongoose(url);
-            return true;
-          } catch (e) {
-            return e.message;
-          }
+      ]).then(x => {
+        if (!x.start) {
+          process.exit(0);
+        }
+      });
+    },
+
+    mongodb() {
+      this.log(messages.mongodbHelp);
+
+      return this.prompt([
+        {
+          type: 'input',
+          name: 'mongo',
+          message: 'MongDB URI, port, or socket',
+          default: 'mongodb://localhost:27017/uwave',
+          filter: jsesc,
+          async validate(url) {
+            try {
+              await validateMongoose(url);
+              return true;
+            } catch (e) {
+              return e.message;
+            }
+          },
         },
-      },
-    ]).then(config => {
-      this.config = config;
-    });
+      ]).then(props => {
+        Object.assign(this.config, props);
+      });
+    },
+
+    redis() {
+      this.log(messages.redisHelp);
+
+      return this.prompt([
+        {
+          type: 'input',
+          name: 'redis',
+          message: 'Redis URI, port, or socket',
+          default: 'redis://localhost:6379',
+          filter: jsesc,
+          async validate(url) {
+            try {
+              await validateRedis(url);
+              return true;
+            } catch (e) {
+              return e.message;
+            }
+          },
+        },
+      ]).then(props => {
+        Object.assign(this.config, props);
+      });
+    },
   },
 
   configuring() {
