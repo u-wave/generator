@@ -1,5 +1,10 @@
 {
   "private": true,
   "name": "",
-  "dependencies": {}
+  "dependencies": {
+    "express": "",
+    "u-wave-api-v1": "",
+    "u-wave-core": "",
+    "u-wave-web": ""
+  }
 }

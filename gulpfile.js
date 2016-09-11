@@ -9,7 +9,7 @@ const relative = require('path').relative;
 const through = require('through2');
 const gulpif = require('gulp-if');
 
-const src = 'src/**/*.js';
+const src = 'src/**';
 const dest = 'generators/';
 
 const shouldCompile = file =>
