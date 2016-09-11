@@ -1,7 +1,7 @@
-import { Base } from 'yeoman-generator';
+import SourceGenerator from '../SourceGenerator';
 import validateApiKey from './validateApiKey';
 
-module.exports = Base.extend({
+module.exports = SourceGenerator.extend({
   initializing() {
     this.option('source-type', {
       type: String,
@@ -29,20 +29,24 @@ module.exports = Base.extend({
     });
   },
 
-  writing() {
-    this.fs.extendJSON(this.destinationPath('package.json'), {
-      dependencies: {
-        'u-wave-source-youtube': '^1.0.0',
-      },
-    });
+  writing: {
+    pkg() {
+      this.fs.extendJSON(this.destinationPath('package.json'), {
+        dependencies: {
+          'u-wave-source-youtube': '^1.0.0',
+        },
+      });
+    },
 
-    this.fs.copyTpl(
-      this.templatePath('youtube.js'),
-      this.destinationPath('src/sources/youtube.js'),
-      {
-        sourceType: this.options['source-type'],
-        options: this.props,
-      }
-    );
+    sourceConfig() {
+      this.fs.copyTpl(
+        this.templatePath('youtube.js'),
+        this.destinationPath('src/sources/youtube.js'),
+        {
+          sourceType: this.options['source-type'],
+          options: this.props,
+        }
+      );
+    },
   },
 });

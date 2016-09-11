@@ -18,14 +18,9 @@ module.exports = Base.extend({
     ];
   },
 
-  _availableSources() {
-    return this.sources.filter(source => (
-      this.options.usedSources.indexOf(source.value) === -1
-    ));
-  },
-
-  _addUsedSource(sourceType) {
-    return this.options.usedSources.concat([ sourceType ]);
+  configuring() {
+    this.fs.write(this.destinationPath('.partial/webPlugins.js'), '');
+    this.fs.write(this.destinationPath('.partial/webPlugins.css'), '');
   },
 
   async configuringSources() {
@@ -65,11 +60,34 @@ module.exports = Base.extend({
         local: require.resolve('./'),
       });
     } else {
-      this.fs.copyTpl(
-        this.templatePath('index.js'),
-        this.destinationPath('src/sources/index.js'),
-        { usedSources: this.options.usedSources }
-      );
+      this._makePluginFiles();
     }
   },
+
+  _availableSources() {
+    return this.sources.filter(source => (
+      this.options.usedSources.indexOf(source.value) === -1
+    ));
+  },
+
+  _addUsedSource(sourceType) {
+    return this.options.usedSources.concat([sourceType]);
+  },
+
+  _makePluginFiles() {
+    this.fs.copyTpl(
+      this.templatePath('index.js'),
+      this.destinationPath('src/sources/index.js'),
+      { usedSources: this.options.usedSources }
+    );
+
+    this.move(
+      this.destinationPath('.partial/webPlugins.js'),
+      this.destinationPath('src/webPlugins.js')
+    );
+    this.move(
+      this.destinationPath('.partial/webPlugins.css'),
+      this.destinationPath('src/webPlugins.css')
+    );
+  }
 });
