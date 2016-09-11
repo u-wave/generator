@@ -20,7 +20,7 @@ module.exports = Base.extend({
     );
   },
 
-  _addPluginsStyle(sourceFile) {
+  _addPluginsStyle(sourceFile, data = {}) {
     const pluginsStyleFile = this.destinationPath('.partial/webPlugins.css');
     const style = this.fs.read(pluginsStyleFile, { defaults: '' });
 
