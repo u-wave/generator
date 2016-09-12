@@ -2,6 +2,7 @@
   "private": true,
   "name": "",
   "dependencies": {
+    "compression": "",
     "express": "",
     "u-wave-api-v1": "",
     "u-wave-core": "",
