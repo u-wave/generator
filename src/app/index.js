@@ -74,6 +74,19 @@ module.exports = Base.extend({
         Object.assign(this.config, props);
       });
     },
+
+    recaptcha() {
+      return this.prompt([
+        {
+          type: 'confirm',
+          name: 'useReCaptcha',
+          message: 'Enable ReCaptcha on signup',
+          default: true,
+        },
+      ]).then(props => {
+        Object.assign(this.config, props);
+      });
+    },
   },
 
   configuring() {
@@ -88,6 +101,9 @@ module.exports = Base.extend({
   },
 
   default() {
+    if (this.config.useReCaptcha) {
+      this._run('recaptcha');
+    }
     this._run('webApiV1');
     this._run('webClient');
     this._run('sources');
