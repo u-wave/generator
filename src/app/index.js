@@ -43,14 +43,7 @@ module.exports = Base.extend({
           message: 'MongDB URI, port, or socket',
           default: 'mongodb://localhost:27017/uwave',
           filter: jsesc,
-          async validate(url) {
-            try {
-              await validateMongoose(url);
-              return true;
-            } catch (e) {
-              return e.message;
-            }
-          },
+          validate: validateMongoose(url),
         },
       ]).then(props => {
         Object.assign(this.config, props);
@@ -67,14 +60,7 @@ module.exports = Base.extend({
           message: 'Redis URI, port, or socket',
           default: 'redis://localhost:6379',
           filter: jsesc,
-          async validate(url) {
-            try {
-              await validateRedis(url);
-              return true;
-            } catch (e) {
-              return e.message;
-            }
-          },
+          validate: validateRedis,
         },
       ]).then(props => {
         Object.assign(this.config, props);

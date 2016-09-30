@@ -3,18 +3,18 @@ import Redis from 'ioredis';
 const rxAddrNotFound = /getaddrinfo.*ENOTFOUND/;
 
 export default function validateRedis(url) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const redis = new Redis(url);
     redis.on('ready', () => {
       redis.disconnect();
-      resolve();
+      resolve(true);
     });
     redis.on('error', error => {
       redis.disconnect();
       if (rxAddrNotFound.test(error.message)) {
-        reject(new Error('Could not connect to Redis at that URI.'));
+        resolve('Could not connect to Redis at that URI.');
       } else {
-        reject(error);
+        resolve(error.message);
       }
     });
   })
