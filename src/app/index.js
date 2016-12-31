@@ -1,4 +1,4 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import validateRedis from './validateRedis';
 import validateMongoose from './validateMongoose';
 import {
@@ -10,23 +10,21 @@ import jsesc from 'jsesc';
 import requireRelative from 'require-relative';
 import * as messages from '../messages';
 
-module.exports = Base.extend({
+module.exports = Generator.extend({
   initializing() {
-    this.config = {};
+    this.props = {};
   },
 
   prompting: {
     intro() {
       this.log(messages.banner);
 
-      return this.prompt([
-        {
-          type: 'confirm',
-          name: 'start',
-          message: 'Begin üWave setup',
-          default: true,
-        },
-      ]).then(x => {
+      return this.prompt({
+        type: 'confirm',
+        name: 'start',
+        message: 'Begin üWave setup',
+        default: true,
+      }).then(x => {
         if (!x.start) {
           process.exit(0);
         }
@@ -36,34 +34,30 @@ module.exports = Base.extend({
     mongodb() {
       this.log(messages.mongodbHelp);
 
-      return this.prompt([
-        {
-          type: 'input',
-          name: 'mongo',
-          message: 'MongDB URI, port, or socket',
-          default: 'mongodb://localhost:27017/uwave',
-          filter: jsesc,
-          validate: validateMongoose(url),
-        },
-      ]).then(props => {
-        Object.assign(this.config, props);
+      return this.prompt({
+        type: 'input',
+        name: 'mongo',
+        message: 'MongDB URI, port, or socket',
+        default: 'mongodb://localhost:27017/uwave',
+        filter: jsesc,
+        validate: validateMongoose,
+      }).then((props) => {
+        Object.assign(this.props, props);
       });
     },
 
     redis() {
       this.log(messages.redisHelp);
 
-      return this.prompt([
-        {
-          type: 'input',
-          name: 'redis',
-          message: 'Redis URI, port, or socket',
-          default: 'redis://localhost:6379',
-          filter: jsesc,
-          validate: validateRedis,
-        },
-      ]).then(props => {
-        Object.assign(this.config, props);
+      return this.prompt({
+        type: 'input',
+        name: 'redis',
+        message: 'Redis URI, port, or socket',
+        default: 'redis://localhost:6379',
+        filter: jsesc,
+        validate: validateRedis,
+      }).then((props) => {
+        Object.assign(this.props, props);
       });
     },
 
@@ -88,21 +82,19 @@ module.exports = Base.extend({
           message: 'Admin password',
           validate: validatePassword,
         },
-      ]).then(user => {
+      ]).then((user) => {
         this.adminUser = user;
       });
     },
 
     recaptcha() {
-      return this.prompt([
-        {
-          type: 'confirm',
-          name: 'useReCaptcha',
-          message: 'Enable ReCaptcha on signup',
-          default: true,
-        },
-      ]).then(props => {
-        Object.assign(this.config, props);
+      return this.prompt({
+        type: 'confirm',
+        name: 'useReCaptcha',
+        message: 'Enable ReCaptcha on signup',
+        default: true,
+      }).then((props) => {
+        Object.assign(this.props, props);
       });
     },
   },
@@ -112,26 +104,20 @@ module.exports = Base.extend({
     this.fs.writeJSON(this.destinationPath('package.json'), pkg);
   },
 
-  _run(name) {
-    this.composeWith(`uwave:${name}`, {}, {
-      local: require.resolve(`../${name}`),
-    });
-  },
-
   default() {
-    if (this.config.useReCaptcha) {
-      this._run('recaptcha');
+    if (this.props.useReCaptcha) {
+      this.composeWith(require.resolve('../recaptcha'));
     }
-    this._run('webApiV1');
-    this._run('webClient');
-    this._run('sources');
+    this.composeWith(require.resolve('../webApiV1'));
+    this.composeWith(require.resolve('../webClient'));
+    this.composeWith(require.resolve('../sources'));
   },
 
   writing() {
     this.fs.copyTpl(
       this.templatePath('server.js'),
       this.destinationPath('src/server.js'),
-      this.config
+      this.props
     );
   },
 
@@ -142,8 +128,8 @@ module.exports = Base.extend({
     async adminUser() {
       const uwave = requireRelative('u-wave-core', this.destinationRoot());
       const uw = uwave({
-        redis: this.config.redis,
-        mongo: this.config.mongo,
+        redis: this.props.redis,
+        mongo: this.props.mongo,
       });
       const user = await uw.createUser(this.adminUser);
       // numerical role, for now

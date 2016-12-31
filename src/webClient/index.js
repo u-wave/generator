@@ -1,6 +1,6 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 
-module.exports = Base.extend({
+module.exports = Generator.extend({
   initializing() {
   },
 
