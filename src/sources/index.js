@@ -1,4 +1,4 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import pify from 'pify';
 import { Separator } from 'inquirer';
 import * as messages from '../messages';
@@ -6,7 +6,7 @@ import * as messages from '../messages';
 /**
  * Recursive generator that keeps asking for media source configuration.
  */
-module.exports = Base.extend({
+module.exports = Generator.extend({
   initializing() {
     this.option('usedSources', {
       type: Array,
@@ -56,17 +56,11 @@ module.exports = Base.extend({
         },
       ]);
 
-      this.composeWith(`uwave:${sourceType}Source`, { options }, {
-        local: require.resolve(`../${sourceType}Source`),
-      });
+      this.composeWith(require.resolve(`../${sourceType}Source`), options);
       // re-run
-      this.composeWith('uwave:sources', {
-        options: {
-          // Remove from available sources, so we don't ask again.
-          usedSources: this._addUsedSource(sourceType),
-        },
-      }, {
-        local: require.resolve('./'),
+      this.composeWith(require.resolve('./'), {
+        // Remove from available sources, so we don't ask again.
+        usedSources: this._addUsedSource(sourceType),
       });
     } else {
       this._makePluginFiles = true;

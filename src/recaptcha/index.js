@@ -1,7 +1,7 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import validateSecret from './validateSecret';
 
-module.exports = Base.extend({
+module.exports = Generator.extend({
   prompting() {
     return this.prompt([
       {

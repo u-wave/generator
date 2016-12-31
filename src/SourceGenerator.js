@@ -1,9 +1,9 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import jsesc from 'jsesc';
 import stripIndent from 'strip-indent';
 import ejs from 'ejs';
 
-module.exports = Base.extend({
+module.exports = Generator.extend({
   _addPluginsScript(sourceFile, data = {}) {
     const pluginsScriptFile = this.destinationPath('.partial/webPlugins.js');
     const script = this.fs.read(pluginsScriptFile, { defaults: '' });
