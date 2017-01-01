@@ -125,6 +125,9 @@ module.exports = Generator.extend({
     npm() {
       this.npmInstall([], { save: true });
     },
+  },
+
+  end: {
     async adminUser() {
       const uwave = requireRelative('u-wave-core', this.destinationRoot());
       const uw = uwave({
