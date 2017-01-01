@@ -5,14 +5,12 @@ module.exports = Generator.extend({
   initializing() {
   },
 
-  prompting() {
-    return this.prompt({
+  async prompting() {
+    this.props = await this.prompt({
       type: 'list',
       name: 'emoji',
       message: 'Which emoji pack do you want to use?',
       choices: emojiPacks,
-    }).then((props) => {
-      this.props = props;
     });
   },
 

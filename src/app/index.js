@@ -16,53 +16,53 @@ module.exports = Generator.extend({
   },
 
   prompting: {
-    intro() {
+    async intro() {
       this.log(messages.banner);
 
-      return this.prompt({
+      const { start } = await this.prompt({
         type: 'confirm',
         name: 'start',
         message: 'Begin üWave setup',
         default: true,
-      }).then(x => {
-        if (!x.start) {
-          process.exit(0);
-        }
       });
+
+      if (!start) {
+        process.exit(0);
+      }
     },
 
-    mongodb() {
+    async mongodb() {
       this.log(messages.mongodbHelp);
 
-      return this.prompt({
+      const props = await this.prompt({
         type: 'input',
         name: 'mongo',
         message: 'MongDB URI, port, or socket',
         default: 'mongodb://localhost:27017/uwave',
         filter: jsesc,
         validate: validateMongoose,
-      }).then((props) => {
-        Object.assign(this.props, props);
       });
+
+      Object.assign(this.props, props);
     },
 
-    redis() {
+    async redis() {
       this.log(messages.redisHelp);
 
-      return this.prompt({
+      const props = await this.prompt({
         type: 'input',
         name: 'redis',
         message: 'Redis URI, port, or socket',
         default: 'redis://localhost:6379',
         filter: jsesc,
         validate: validateRedis,
-      }).then((props) => {
-        Object.assign(this.props, props);
       });
+
+      Object.assign(this.props, props);
     },
 
-    adminUser() {
-      return this.prompt([
+    async adminUser() {
+      this.adminUser = await this.prompt([
         {
           type: 'input',
           name: 'email',
@@ -82,20 +82,18 @@ module.exports = Generator.extend({
           message: 'Admin password',
           validate: validatePassword,
         },
-      ]).then((user) => {
-        this.adminUser = user;
-      });
+      ]);
     },
 
-    recaptcha() {
-      return this.prompt({
+    async recaptcha() {
+      const props = await this.prompt({
         type: 'confirm',
         name: 'useReCaptcha',
         message: 'Enable ReCaptcha on signup',
         default: true,
-      }).then((props) => {
-        Object.assign(this.props, props);
       });
+
+      Object.assign(this.props, props);
     },
   },
 

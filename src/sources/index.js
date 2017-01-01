@@ -32,29 +32,25 @@ module.exports = Generator.extend({
       this.log(messages.sourcesHelp);
     }
 
-    const { sourceType } = await this.prompt([
-      {
-        type: 'list',
-        name: 'sourceType',
-        message: this._isFirstRun()
-          ? 'Do you want to configure another media source?'
-          : 'Which media source do you want to add?',
-        choices: this._availableSources().concat([
-          new Separator(),
-          { value: null, name: 'No, continue with the installation' },
-        ]),
-      },
-    ]);
+    const { sourceType } = await this.prompt({
+      type: 'list',
+      name: 'sourceType',
+      message: this._isFirstRun()
+        ? 'Do you want to configure another media source?'
+        : 'Which media source do you want to add?',
+      choices: this._availableSources().concat([
+        new Separator(),
+        { value: null, name: 'No, continue with the installation' },
+      ]),
+    });
 
     if (sourceType) {
-      const options = await this.prompt([
-        {
-          type: 'input',
-          name: 'source-type',
-          message: 'sourceType name',
-          default: sourceType,
-        },
-      ]);
+      const options = await this.prompt({
+        type: 'input',
+        name: 'source-type',
+        message: 'sourceType name',
+        default: sourceType,
+      });
 
       this.composeWith(require.resolve(`../${sourceType}Source`), options);
       // re-run

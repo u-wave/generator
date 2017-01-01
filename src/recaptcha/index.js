@@ -2,8 +2,8 @@ import Generator from 'yeoman-generator';
 import validateSecret from './validateSecret';
 
 module.exports = Generator.extend({
-  prompting() {
-    return this.prompt([
+  async prompting() {
+    this.recaptcha = await this.prompt([
       {
         type: 'input',
         name: 'secret',
@@ -22,12 +22,7 @@ module.exports = Generator.extend({
         name: 'key',
         message: 'ReCaptcha site key',
       },
-    ]).then(props => {
-      this.recaptcha = {
-        secret: props.secret,
-        key: props.key,
-      };
-    });
+    ]);
   },
 
   configuring() {

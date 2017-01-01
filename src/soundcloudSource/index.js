@@ -9,23 +9,19 @@ module.exports = SourceGenerator.extend({
     });
   },
 
-  prompting() {
-    return this.prompt([
-      {
-        type: 'input',
-        name: 'key',
-        message: 'SoundCloud API key',
-        async validate(key) {
-          try {
-            await validateApiKey(key);
-            return true;
-          } catch (e) {
-            return e.message;
-          }
-        },
+  async prompting() {
+    this.props = await this.prompt({
+      type: 'input',
+      name: 'key',
+      message: 'SoundCloud API key',
+      async validate(key) {
+        try {
+          await validateApiKey(key);
+          return true;
+        } catch (e) {
+          return e.message;
+        }
       },
-    ], props => {
-      this.props = props;
     });
   },
 
