@@ -15,7 +15,7 @@
     "ioredis": "^2.3.0",
     "is-email": "^1.0.0",
     "jsesc": "^2.2.0",
-    "mongoose": "^4.6.0",
+    "mongoose": "^4.8.6",
     "pify": "^2.3.0",
     "require-relative": "^0.8.7",
     "strip-indent": "^2.0.0",
