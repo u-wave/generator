@@ -19,7 +19,7 @@
     "pify": "^2.3.0",
     "require-relative": "^0.8.7",
     "strip-indent": "^2.0.0",
-    "yeoman-generator": "^1.0.0"
+    "yeoman-generator": "^1.1.1"
   },
   "devDependencies": {
     "babel-preset-es2015-node4": "^2.1.0",
