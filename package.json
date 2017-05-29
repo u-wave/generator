@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "ejs": "^2.5.2",
-    "got": "^6.3.0",
+    "got": "^7.0.0",
     "inquirer": "^2.0.0",
     "ioredis": "^2.3.0",
     "is-email": "^1.0.0",
