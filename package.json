@@ -9,7 +9,7 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "ejs": "^2.5.2",
+    "ejs": "^2.5.7",
     "got": "^7.0.0",
     "inquirer": "^2.0.0",
     "ioredis": "^3.0.0",
