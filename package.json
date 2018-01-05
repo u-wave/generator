@@ -27,7 +27,7 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-if": "^2.0.1",
-    "gulp-newer": "^1.2.0",
+    "gulp-newer": "^1.4.0",
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.9",
